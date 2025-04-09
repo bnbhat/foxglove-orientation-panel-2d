@@ -3,7 +3,7 @@
   "displayName": "Orientation Panel 2D",
   "description": "A 2D visualization of orientation data from ROS messages with toggleable roll, pitch, and yaw displays",
   "publisher": "peek-robotics",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "main": "./dist/extension.js",
   "keywords": [

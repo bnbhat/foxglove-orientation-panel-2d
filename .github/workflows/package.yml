@@ -69,7 +69,7 @@ jobs:
         id: get-filename
         run: |
           VERSION=${{ needs.check-version.outputs.version }}
-          FILENAME="orientation-panel-2d-$VERSION.foxe"
+          FILENAME="peekrobotics.orientation-panel-2d-$VERSION.foxe"
           echo "filename=$FILENAME" >> $GITHUB_OUTPUT
       
       - name: Upload extension as artifact
@@ -98,7 +98,7 @@ jobs:
         id: get-filename
         run: |
           VERSION=${{ needs.check-version.outputs.version }}
-          FILENAME="orientation-panel-2d-$VERSION.foxe"
+          FILENAME="peekrobotics.orientation-panel-2d-$VERSION.foxe"
           echo "filename=$FILENAME" >> $GITHUB_OUTPUT
       
       - name: Create Release
