@@ -11,6 +11,10 @@ A 2D visualization panel for orientation data from ROS messages with toggleable 
 - Global toggles for roll, pitch, and yaw displays
 - Visibility toggle for each topic directly from the settings panel
 
+## Screenshot
+
+![Orientation Panel 2D](screenshot.png)
+
 ## Supported Message Types
 
 - `sensor_msgs/Imu`
