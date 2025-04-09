@@ -1,0 +1,7 @@
+node_modules
+dist
+*.foxe
+.DS_Store
+.vscode
+*.log
+*.foxe

@@ -1,0 +1,112 @@
+name: Package Extension
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+      version: ${{ steps.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - name: Check if package.json version changed
+        id: check
+        run: |
+          # Get the current and previous package.json content
+          git show HEAD:package.json > current_package.json
+          git show HEAD~1:package.json > previous_package.json 2>/dev/null || echo "{\"version\": \"0.0.0\"}" > previous_package.json
+          
+          # Extract versions
+          CURRENT_VERSION=$(node -p "require('./current_package.json').version")
+          PREVIOUS_VERSION=$(node -p "require('./previous_package.json').version")
+          
+          echo "Current version: $CURRENT_VERSION"
+          echo "Previous version: $PREVIOUS_VERSION"
+          
+          # Set output variables
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version unchanged"
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+  build-and-package:
+    needs: check-version
+    if: ${{ needs.check-version.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      
+      - name: Build extension
+        run: yarn build
+      
+      - name: Package extension
+        run: yarn package
+      
+      - name: Get extension filename
+        id: get-filename
+        run: |
+          VERSION=${{ needs.check-version.outputs.version }}
+          FILENAME="orientation-panel-2d-$VERSION.foxe"
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+      
+      - name: Upload extension as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: foxglove-extension
+          path: ${{ steps.get-filename.outputs.filename }}
+          if-no-files-found: error
+
+  create-release:
+    needs: [check-version, build-and-package]
+    if: ${{ needs.check-version.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download packaged extension
+        uses: actions/download-artifact@v4
+        with:
+          name: foxglove-extension
+          path: ./
+      
+      - name: Get extension filename
+        id: get-filename
+        run: |
+          VERSION=${{ needs.check-version.outputs.version }}
+          FILENAME="orientation-panel-2d-$VERSION.foxe"
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.check-version.outputs.version }}
+          name: Release v${{ needs.check-version.outputs.version }}
+          files: ${{ steps.get-filename.outputs.filename }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
