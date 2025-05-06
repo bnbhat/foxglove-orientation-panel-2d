@@ -26,7 +26,7 @@ import {
 } from "./Settings";
 
 // Constants
-const MAX_TOPICS = 9;
+const MAX_TOPICS = 12;
 const ORIENTATION_TYPES = [
   // "geometry_msgs/QuaternionStamped",
   // "geometry_msgs/PoseStamped",
@@ -48,6 +48,10 @@ const CONFIG = {
     "var(--color-message-6-transparent, rgba(255, 0, 255, 0.75))",
     "var(--color-message-7-transparent, rgba(255, 128, 0, 0.75))",
     "var(--color-message-8-transparent, rgba(128, 0, 255, 0.75))",
+    "var(--color-message-9-transparent, rgba(255, 192, 203, 0.75))",
+    "var(--color-message-10-transparent, rgba(165, 42, 42, 0.75))",
+    "var(--color-message-11-transparent, rgba(50, 205, 50, 0.75))",
+    "var(--color-message-12-transparent, rgba(0, 128, 128, 0.75))",
   ],
   colorClasses: [
     "message-1",
@@ -58,6 +62,10 @@ const CONFIG = {
     "message-6",
     "message-7",
     "message-8",
+    "message-9",
+    "message-10",
+    "message-11",
+    "message-12",
   ],
   updateFrequency: 30, // ms - throttle updates for better performance
 };
@@ -169,6 +177,10 @@ const panelStyles = `
   --color-message-6: #FF00FF;
   --color-message-7: #FF8000;
   --color-message-8: #8000FF;
+  --color-message-9: #FFC0CB;
+  --color-message-10: #A52A2A;
+  --color-message-11: #32CD32;
+  --color-message-12: #008080;
   
   /* Message colors with transparency */
   --color-message-1-transparent: rgba(255, 0, 0, 0.75);
@@ -179,6 +191,10 @@ const panelStyles = `
   --color-message-6-transparent: rgba(255, 0, 255, 0.75);
   --color-message-7-transparent: rgba(255, 128, 0, 0.75);
   --color-message-8-transparent: rgba(128, 0, 255, 0.75);
+  --color-message-9-transparent: rgba(255, 192, 203, 0.75);
+  --color-message-10-transparent: rgba(165, 42, 42, 0.75);
+  --color-message-11-transparent: rgba(50, 205, 50, 0.75);
+  --color-message-12-transparent: rgba(0, 128, 128, 0.75);
 }
 
 .orientation-panel-2d {
@@ -307,6 +323,10 @@ const panelStyles = `
 .message-6 { border-left: 4px solid var(--color-message-6); }
 .message-7 { border-left: 4px solid var(--color-message-7); }
 .message-8 { border-left: 4px solid var(--color-message-8); }
+.message-9 { border-left: 4px solid var(--color-message-9); }
+.message-10 { border-left: 4px solid var(--color-message-10); }
+.message-11 { border-left: 4px solid var(--color-message-11); }
+.message-12 { border-left: 4px solid var(--color-message-12); }
 
 .topic-header {
   display: flex;
@@ -331,6 +351,10 @@ const panelStyles = `
 .topic-color-indicator.message-6 { background-color: var(--color-message-6); }
 .topic-color-indicator.message-7 { background-color: var(--color-message-7); }
 .topic-color-indicator.message-8 { background-color: var(--color-message-8); }
+.topic-color-indicator.message-9 { background-color: var(--color-message-9); }
+.topic-color-indicator.message-10 { background-color: var(--color-message-10); }
+.topic-color-indicator.message-11 { background-color: var(--color-message-11); }
+.topic-color-indicator.message-12 { background-color: var(--color-message-12); }
 
 .topic-name {
   font-weight: bold;
