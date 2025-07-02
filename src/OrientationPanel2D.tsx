@@ -34,7 +34,9 @@ const ORIENTATION_TYPES = [
   // "geometry_msgs/Transform",
   // "geometry_msgs/TransformStamped",
   "sensor_msgs/Imu",
+  "sensor_msgs/msg/Imu",
   "nav_msgs/Odometry",
+  "nav_msgs/msg/Odometry",
 ];
 
 // Configuration for color mapping
